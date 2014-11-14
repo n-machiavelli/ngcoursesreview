@@ -7,6 +7,8 @@ angular.module('ngReviewApp')
 		var reviews=[];
 		var courses=[];
 		var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/");     
+		
+
 		this.getReviews=function getReviews(courseID){
 			reviews=[
 						{reviewID:1,reviewText:"Course was good. had an A"},
@@ -14,7 +16,9 @@ angular.module('ngReviewApp')
 					];
 			return reviews;
 		}
-		this.addReview=function addReview(courseID, reviewText){
+
+		
+		this.addReview=function addReview(){
 			//do something
 		}
 		this.getCourses=function getCourses(){

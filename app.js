@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 
-angular.module('ngReviewApp',['ngRoute','firebase','LocalStorageModule'])
+angular.module('ngReviewApp',['ngRoute','firebase','LocalStorageModule','booksApp.controllers','booksApp.services'])
 
 .config(function($routeProvider){
 
@@ -46,7 +46,13 @@ angular.module('ngReviewApp',['ngRoute','firebase','LocalStorageModule'])
         controller: 'ReviewController',
         controllerAs: 'vm',
         authRequired: true
-    });
+    })
+    .when('/books', {
+        templateUrl: 'views/books.html',
+        controller: 'booksAppCtrl',
+        
+    })
+    ;
 
 })
 
