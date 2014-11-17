@@ -11,13 +11,13 @@
     
     
 
-    $m = new MongoClient();
+    $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
 	echo "Connection to database successfully";
 	
-	$db = $m->reviewdb;
+	$db = $m->coursereviews;
 	echo "Database mydb selected";
 	
-	$collection = $db->review;
+	$collection = $db->coursereviews;
    echo "Collection selected succsessfully";
    $document = array( 
        "uid" => $uid, 

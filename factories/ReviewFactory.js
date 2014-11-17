@@ -10,16 +10,51 @@ angular.module('ngReviewApp')
 		
 
 		this.getReviews=function getReviews(courseID){
-			reviews=[
-						{reviewID:1,reviewText:"Course was good. had an A"},
-						{reviewID:2,reviewText:"Professor was not bad. had a B"},
-					];
-			return reviews;
+			var deferred=$q.defer();
+			var request = $http({
+                method: 'POST',
+                url: "api/v1/reviews/list",
+                data: {
+                	courseID: courseID
+                }
+                //headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            });
+			//vm.reviews=ReviewFactory.getReviews(courseID);
+			return deferred.promise;
 		}
 
 		
-		this.addReview=function addReview(){
-			//do something
+		this.addReview=function addReview(uid,courseID,reviewTitle,bookTitle,reviewBody){
+			var deferred=$q.defer();
+			var request = $http({
+                method: 'POST',
+                url: "api/v1/reviews/add",
+                data: {
+                	uid: uid,
+                	courseID: courseID,
+                	reviewTitle: reviewTitle,
+                	bookTitle: bookTitle,
+                	reviewBody: reviewBody
+                }
+                //headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+            	message='Review Added Successfully';
+               console.log("Data Added to the database successfully");
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            });
+			//vm.reviews=ReviewFactory.getReviews(courseID);
+			console.log("Review has been added");
+			return deferred.promise;
 		}
 		this.getCourses=function getCourses(){
 			courses=[

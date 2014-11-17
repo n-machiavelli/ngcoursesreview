@@ -13,7 +13,7 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 	this.rtitle=[];
 	this.bktitle=[];
 	this.btitle=[];
-	this.courseId='';
+	this.courseID='';
 	this.reviewStatus='';
 	this.showReviewForm=false;
 	//var authData=AuthFactory.getAuthData(); //implement promise **************
@@ -33,7 +33,7 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 	});
 	// AuthFactory.fillAuthData();
 	this.formControl=function(dirty){
-		if(vm.courseId=='' && dirty=='1')
+		if(vm.courseID=='' && dirty=='1')
 		{
 			vm.reviewStatus='Please select course';
 		}
@@ -43,7 +43,7 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 		this.showReviewForm=false;	
 		}
 		else{
-		vm.reviewStatus=this.courseId+' selected';
+		vm.reviewStatus=this.courseID+' selected';
 		this.showReviewForm=true;
 	}
 
@@ -57,40 +57,33 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 		}
 		else
 		{
-			vm.reviews=ReviewFactory.getReviews(vm.courseId);
+			
+			var promise=ReviewFactory.getReviews(vm.courseID);
+			promise.then(function(data){
+				console.log(data);
+				vm.reviews=data;
+			}, function(reason){
+				console.log(reason);
+				vm.message=reason;
+			});
 		}
 		
 		//call 
 	}
 
 	this.addReviews=function(){
+		var promise=ReviewFactory.addReview(this.auth.uid,this.courseID,this.reviewTitle,this.bookTitle,this.reviewBody);
+		promise.then(function(message){
+			console.log(message);
+			vm.message=message;
+			vm.showReviewForm=false;
+		}, function(reason){
+			vm.message=reason;
+			console.log(reason)
+		}, function(update){
+			console.log("got notification" + update);
+		});
 
-		var request = $http({
-                method: 'POST',
-                url: "putData.php",
-                data: {
-                	uid: this.auth.uid,
-                	courseId: this.courseId,
-                	reviewTitle: this.rtitle,
-                	bookTitle: this.bktitle,
-                	reviewBody: this.btitle
-
-                },
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-            });
-            /* Check whether the HTTP Request is Successfull or not. */
-            request.success(function (data) {
-            	vm.reviewStatus='Review Added Successfully';
-            	vm.showReviewForm=false;
-               console.log("Data Added to the database successfully");
-
-               // $scope.message = "From PHP file : "+data;
-            });
-
-           
-			//vm.reviews=ReviewFactory.getReviews(courseID);
-			console.log("Review has been added");
-		
 	};
 
 	//this.courses=ReviewFactory.getCourses();

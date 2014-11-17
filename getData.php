@@ -1,13 +1,13 @@
 <?php
 // Connect to test database
-	$m = new MongoClient();
+	$m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
 	echo "Connection to database successfully<br/>";
 	
-	$db = $m->reviewdb;
+	$db = $m->coursereviews;
 	echo "Database mydb selected<br/>";
 	
  $collection = $db->review;
-   echo "Collection selected succsessfully<br/>";
+   echo "Collection selected successfully<br/>";
 
    $cursor = $collection->find();
    // iterate cursor to display title of documents
