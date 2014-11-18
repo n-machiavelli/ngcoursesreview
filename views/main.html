@@ -1,63 +1,47 @@
-
-
 <form class="formoid-metro-cyan" style="background-color:#FFFFFF;font-size:14px;font-family:'Open Sans','Helvetica Neue','Helvetica',Arial,Verdana,sans-serif;color:#666666;max-width:480px;min-width:150px" method="post" autocomplete="off" ng-submit="vm.logout()" >
-
-<div class="submit"><input type="submit" value="Logout" ng-click="logout()" /></div>
-
+	<div class="submit"><input type="submit" value="Logout" ng-click="logout()" /></div>
 </form>
-
 <form class="formoid-metro-cyan" style="background-color:#FFFFFF;font-size:14px;font-family:'Open Sans','Helvetica Neue','Helvetica',Arial,Verdana,sans-serif;color:#666666;max-width:480px;min-width:150px" method="post" autocomplete="off" ng-submit="vm.getReviews()" >
-
-<div class="title"><h2>Courses Review</h2></div>
-
+	<div class="title"><h2>Courses Review</h2></div>
 	<div class="element-input" ><label class="title">Username:<span class="required">*</span></label><input class="large" type="text" name="email" ng-model="vm.email" required="required"/></div>
-
 	<div class="element-select" ><label class="title">List of Courses:<span class="required">*</span></label>
-		<select ng-model="vm.courseID" id="course" required="required">
-			<option value="{{course.courseID}}" ng-repeat="course in vm.courses">{{course.courseName}}</option>
-		</select>
-	</div>
-	{{vm.reviewStatus}}
-	<div class="submit"><label style="float:left;background-color:#2da5da"><a href='#/books'>Books</a></label>&nbsp;<input type="submit" value="Add Reviews" ng-click="vm.formControl(1)" />&nbsp;
-	<input type="submit" value="Display Reviews" ng-click="vm.displayReviews()"/></div>
-<div ng-show="vm.showReviewForm">
-<form name="reviewform" novalidate>
-	<div class="element-input" ><label class="title">Review Title:<span class="required">*</span></label><input class="large" type="text" name="reviewTitle" ng-model="vm.reviewTitle" /></div>
-	<div class="element-input" ><label class="title">Book Title:<span class="required">*</span></label><input class="large" type="text" name="bookTitle" ng-model="vm.bookTitle" /></div>
-
-	<div class="element-textarea"><label class="title">Review Body:</label><textarea class="medium" ng-model="vm.reviewBody" name="reviewBody" cols="20" rows="5" ></textarea></div>
-	<div class="element-recaptcha"><label class="title">reCAPTCHA</label><script type="text/javascript">var RecaptchaOptions = {theme : "clean"};</script>
-<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdBBv0SAAAAAOLtUjhIQ8uXGw1bTIfUofcO64Y_&theme=clean"></script>
-<noscript><iframe src="http://www.google.com/recaptcha/api/noscript?k=6LdBBv0SAAAAAOLtUjhIQ8uXGw1bTIfUofcO64Y_&hl=en" height="300" width="500" frameborder="0"></iframe></br>
-<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea><input type="hidden" name="recaptcha_response_field" value="manual_challenge"></noscript>
-<script type="text/javascript">if (/#invalidcaptcha$/.test(window.location)) (document.getElementById("recaptcha_widget_div")).className += " error"</script></div>
-	
-	<div class="submit"><input type="submit" value="Add Review" ng-click="vm.addReviews()"/>
-&nbsp;<input type="submit" value="Remove" ng-click="vm.formControl(2)"/>
-	</div>
-
-
-<!-- 	<div class="reviewscontent" id="formoid-info">	
-	<span ng-repeat="r in vm.reviews">
-		<h1>{{r.reviewID}}</h1>
-		<span>{{r.reviewText}}</span>
-		{{r.reviewText}}
-
-	</span>
-
-	</div> -->
-
-</form>	
+	<select ng-model="vm.courseID" id="course" required="required">
+		<option value="{{course.courseID}}" ng-repeat="course in vm.courses">{{course.courseName}}</option>
+	</select>
 </div>
-	<div class="sidebar design-selection" id="design-selection">
-					<ul>
-					
-					<li ng-repeat="r in vm.reviews">
-						<a href="/221/" class="design-name">{{r.reviewTitle}} (Book : {{r.bookTitle}})</a> by						<span class="designer-name">{{r.uid}}</span>
-						<p>{{r.reviewBody}}</p>
-					</li>
+{{vm.reviewStatus}}
+<div class="submit">
+	<!-- <label style="float:left;background-color:#2da5da"><a href='#/books'>Books</a></label>&nbsp; -->
+	<input type="submit" value="Display Books" ng-click="vm.displayBooks()" />&nbsp;
+	<input type="submit" value="Add Reviews" ng-click="vm.formControl(1)" />&nbsp;
+	<input type="submit" value="Display Reviews" ng-click="vm.displayReviews()"/>
+</div>
+<h3>ebay pic</h3>
+<img ng-src="{{vm.imgurl}}" />
+<div ng-show="vm.showReviewForm">
+	<form name="reviewform" novalidate>
+		<div class="element-input" ><label class="title">Review Title:<span class="required">*</span></label><input class="large" type="text" name="reviewTitle" ng-model="vm.reviewTitle" /></div>
+		<div class="element-input" ><label class="title">Book Title:<span class="required">*</span></label><input class="large" type="text" name="bookTitle" ng-model="vm.bookTitle" /></div>
+		<div class="element-textarea"><label class="title">Review Body:</label><textarea class="medium" ng-model="vm.reviewBody" name="reviewBody" cols="20" rows="5" ></textarea></div>
+		<div class="element-recaptcha"><label class="title">reCAPTCHA</label><script type="text/javascript">var RecaptchaOptions = {theme : "clean"};</script>
+		<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdBBv0SAAAAAOLtUjhIQ8uXGw1bTIfUofcO64Y_&theme=clean"></script>
+		<noscript><iframe src="http://www.google.com/recaptcha/api/noscript?k=6LdBBv0SAAAAAOLtUjhIQ8uXGw1bTIfUofcO64Y_&hl=en" height="300" width="500" frameborder="0"></iframe></br>
+		<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea><input type="hidden" name="recaptcha_response_field" value="manual_challenge"></noscript>
+		<script type="text/javascript">if (/#invalidcaptcha$/.test(window.location)) (document.getElementById("recaptcha_widget_div")).className += " error"</script></div>
+		
+		<div class="submit"><input type="submit" value="Add Review" ng-click="vm.addReviews()"/>
+		&nbsp;<input type="submit" value="Remove" ng-click="vm.formControl(2)"/>
+	</div>
+</form>
+</div>
+<div class="sidebar design-selection" id="design-selection">
+<ul>
+	
+	<li ng-repeat="r in vm.reviews">
+		<a href="/221/" class="design-name">{{r.reviewTitle}} (Book : {{r.bookTitle}})</a> by						<span class="designer-name">{{r.uid}}</span>
+		<p>{{r.reviewBody}}</p>
+	</li>
 </ul>
-					<br/>	
-					</div>
-
+<br/>
+</div>
 </form>

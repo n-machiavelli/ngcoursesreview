@@ -5,8 +5,8 @@ angular
 	.module('ngReviewApp')
 	.controller('MainController',MainController);
 //MainController.$inject=['ReviewFactory'];
-MainController.$inject=['ReviewFactory','AuthFactory','$location','$http'];
-function MainController(ReviewFactory,AuthFactory,$location,$http){
+MainController.$inject=['ReviewFactory','AuthFactory','BookFactory','$location','$http'];
+function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	var vm=this;
 	this.reviews=[];
 	this.auth=[];
@@ -32,6 +32,20 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 		console.log("update");
 	});
 	// AuthFactory.fillAuthData();
+	//this.courses=ReviewFactory.getCourses();
+	//console.log(this.courses);
+	var promise=ReviewFactory.getCoursesFirebase();
+	promise.then(function(snapshotval){
+		console.log(snapshotval);
+		vm.courses=snapshotval;
+	}, function(reason){
+		console.log(reason)
+	}, function(update){
+		console.log("got notification" + update);
+	});
+	console.log("snapshot");
+
+
 	this.formControl=function(dirty){
 		if(vm.courseID=='' && dirty=='1')
 		{
@@ -67,8 +81,26 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 				vm.message=reason;
 			});
 		}
-		
-		//call 
+	}
+	this.displayBooks=function(){
+		if(vm.courseId=='')
+		{
+			vm.reviewStatus='Please select course';
+		}
+		else
+		{
+			console.log("course " + vm.courseID);
+			var promise=BookFactory.getBook(vm.courses,vm.courseID);
+			promise.then(function(data){
+				console.log("out of factory");
+				console.log(data);
+				vm.imgurl=data[0];
+				//vm.books=data;
+			}, function(reason){
+				console.log(reason);
+				vm.message=reason;
+			});
+		}
 	}
 
 	this.addReviews=function(){
@@ -85,19 +117,6 @@ function MainController(ReviewFactory,AuthFactory,$location,$http){
 		});
 
 	};
-
-	//this.courses=ReviewFactory.getCourses();
-	//console.log(this.courses);
-	var promise=ReviewFactory.getCoursesFirebase();
-	promise.then(function(snapshotval){
-		console.log(snapshotval);
-		vm.courses=snapshotval;
-	}, function(reason){
-		console.log(reason)
-	}, function(update){
-		console.log("got notification" + update);
-	});
-	console.log("snapshot");
 
 	//console.log(this.snapshot);
 	//ReviewFactory.setCourses();

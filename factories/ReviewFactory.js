@@ -83,6 +83,7 @@ angular.module('ngReviewApp')
 				});		
 				return deferred.promise;
 		};
+
 		this.setCourses=function setCourses(){
 			console.log("here set courses");
 			coursesRef=ref.child("courses");
