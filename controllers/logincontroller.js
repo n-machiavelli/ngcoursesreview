@@ -10,7 +10,7 @@ angular
 function LoginController(AuthFactory,$location){
 	var vm=this;
     //var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/");	
-	vm.msg="xx";
+	vm.msg='';
 	vm.authData={};
     vm.login=function(){
         var promise=AuthFactory.login(vm.email,vm.password);

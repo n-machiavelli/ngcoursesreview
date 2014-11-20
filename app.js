@@ -52,7 +52,8 @@ angular.module('ngReviewApp',['ngRoute','firebase','LocalStorageModule','booksAp
         controller: 'booksAppCtrl',
         
     })
-    ;
+.otherwise({redirectTo: '/'});
+    
 
 })
 

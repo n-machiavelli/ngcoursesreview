@@ -15,7 +15,9 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	this.btitle=[];
 	this.courseID='';
 	this.reviewStatus='';
-	this.showReviewForm=false;
+	this.showAddReviews=false;
+	this.showBooks=false;
+	this.showReviews=false;
 	//var authData=AuthFactory.getAuthData(); //implement promise **************
 	
 	var promise=AuthFactory.getAuthData();
@@ -45,33 +47,30 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	});
 	console.log("snapshot");
 
-
-	this.formControl=function(dirty){
-		if(vm.courseID=='' && dirty=='1')
+	this.formControl=function(val){
+		if(this.courseID!='' && val==1)
 		{
-			vm.reviewStatus='Please select course';
+			this.reviewStatus=this.courseID+" is selected";
+			this.showAddReviews=true;
+			this.showReviews=false;
+			this.showBooks=false;
 		}
-		else if(dirty=='2')
+		else
 		{
-		vm.reviewStatus='';
-		this.showReviewForm=false;	
+			
+			this.showAddReviews=false;
 		}
-		else{
-		vm.reviewStatus=this.courseID+' selected';
-		this.showReviewForm=true;
 	}
 
-
-	}
-
+	
 	this.displayReviews=function(){
-		if(vm.courseId=='')
+		if(this.courseID=='')
 		{
 			vm.reviewStatus='Please select course';
 		}
 		else
 		{
-			
+			this.reviewStatus=this.courseID+" is selected";
 			var promise=ReviewFactory.getReviews(vm.courseID);
 			promise.then(function(data){
 				console.log(data);
@@ -80,41 +79,54 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 				console.log(reason);
 				vm.message=reason;
 			});
+
+			this.showReviews=true;
+			this.showBooks=false;
+			this.showAddReviews=false;
 		}
-	}
+	};
+
 	this.displayBooks=function(){
-		if(vm.courseId=='')
+		if(vm.courseID=='')
 		{
 			vm.reviewStatus='Please select course';
 		}
 		else
 		{
+			this.reviewStatus=this.courseID+" is selected";
 			console.log("course " + vm.courseID);
 			var promise=BookFactory.getBook(vm.courses,vm.courseID);
 			promise.then(function(data){
 				console.log("out of factory");
 				console.log(data);
 				vm.imgurl=data[0];
+				vm.title=data[1];
+				vm.price=data[2];
 				//vm.books=data;
 			}, function(reason){
 				console.log(reason);
 				vm.message=reason;
 			});
+				
+			this.showAddReviews=false;
+			this.showBooks=true;
+			this.showReviews=false;
 		}
-	}
+	};
 
 	this.addReviews=function(){
+
 		var promise=ReviewFactory.addReview(this.auth.uid,this.courseID,this.reviewTitle,this.bookTitle,this.reviewBody);
 		promise.then(function(message){
 			console.log(message);
 			vm.message=message;
-			vm.showReviewForm=false;
-		}, function(reason){
+			}, function(reason){
 			vm.message=reason;
 			console.log(reason)
 		}, function(update){
 			console.log("got notification" + update);
 		});
+				this.showAddReviews=false;
 
 	};
 
