@@ -55,9 +55,13 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 			this.showReviews=false;
 			this.showBooks=false;
 		}
+		else if(this.courseID=='')
+		{
+			this.reviewStatus="Please select a course";
+		}
 		else
 		{
-			
+
 			this.showAddReviews=false;
 		}
 	}
