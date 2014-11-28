@@ -36,16 +36,15 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	// AuthFactory.fillAuthData();
 	//this.courses=ReviewFactory.getCourses();
 	//console.log(this.courses);
-	var promise=ReviewFactory.getCoursesFirebase();
-	promise.then(function(snapshotval){
-		console.log(snapshotval);
-		vm.courses=snapshotval;
+	var promise=ReviewFactory.getCoursesMongo();
+	promise.then(function(data){
+		console.log(data);
+		vm.courses=data;	
 	}, function(reason){
 		console.log(reason)
 	}, function(update){
 		console.log("got notification" + update);
 	});
-	console.log("snapshot");
 
 	this.formControl=function(val){
 		if(this.courseID!='' && val==1)

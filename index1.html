@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html ng-app="ngReviewApp"> <!--<![endif]-->
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
+        <title>ngCourseReview</title>
+        
+        
+        <!-- Google Author link -->
+        <link rel="author" href="Google+URL"/>
+
+        <!-- Favicon.ico and apple-touch-icon.png (according to Apple docs). A good tool is http://iconifier.net/ -->
+        <link rel="shortcut icon" href="assets/ico/favicon.ico">
+        <link rel="apple-touch-icon" href="touch-icon-iphone.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-ipad.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-iphone-retina.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad-retina.png" />
+
+        <!-- CSS, Normalize First, minify for production -->
+        <link rel="stylesheet" type='text/css' href="less/master.css"/>
+        
+        <!-- Import web fonts using the link tag instead of CSS @import -->
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
+        
+        <!-- Icons from http://fontawesome.io/ -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+                
+    </head>
+
+    <body>
+        
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chrome/‎">install Google Chrome</a> to experience this site.</p>
+        <![endif]-->
+
+        
+        <!-- Header -->
+        <header id="main-header">
+            <div class="container">
+                <h1>ngcoursereview</h1>
+                <p>A web-site for sharing experience for the course in Illinois State University</p>
+            <a class="btn jumper" href="#authors">About Us&nbsp;</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="btn jumper" href="#macbook">What it is?</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="btn jumper" href="#summary">Courses</a>
+            </div>
+        </header>
+        
+        
+        
+        
+        
+
+        <!-- Macbook Section -->
+        <section id="macbook">
+            <div class="container">
+                <h2>What's this all about?</h2>
+                <p>ngCourseReview is an Application designed by Uche Barry Ajokubi and Aayush Agrawal as a part of course work in Advanced Web-Application development. It is built with the mindset of providing experienced reviews and guidance to the students taking various courses in Illinois state university.
+                <br/><a href="https://github.com/donbarry/ngcoursesreview">Project Link</a>    
+
+                </p>
+                
+            </div>
+           
+            </div>
+        </section>
+        <section class="call-to-action">
+            <div class="cta-container cf">
+                <p>Lets help other students to complete their course more wisely
+            
+                </p>
+                               
+            </div>
+        </section>
+  
+          <!-- 
+            <div style="background:#000000;width:100%;position:fixed;top: 0px;">   
+                <a style="margin-left:10%" class="btn jumper" href="#main-header">Home</a>
+                <a style="margin-left:10%" class="btn jumper" href="#summary">Getting Started</a>
+                <a style="margin-left:10%" class="btn jumper" href="#macbook">What it is?</a>
+                <a style="margin-left:10%" class="btn jumper" href="#authors">About Us</a>
+                               
+            </div> -->
+              
+        <!-- Summary Section -->
+        <section id="summary">
+            <div class="container">
+                <div ng-view=""></div>
+                
+</div>
+
+            
+        </section>
+
+        
+        
+        <!-- Three Images Section -->
+        <section id="three-images">
+            <div class="container">
+            <div id="authors"></div>
+                <header class="body-header">
+                    <h2>About Us</h2>
+                    
+                </header>
+        
+
+                <article class="cf">
+                    <div class="img-circle-div" style="float:left">
+                        <img src="images/aayush.jpg"/>
+                        <h3>Aayush Agrawal</h3>
+                        <p>Pursuing M.S in Information Systems</p>
+                    </div>
+
+                  
+
+                    <div class="img-circle-div" style="float:right">
+                        <img src="images/barry.jpg"/>
+                        <h3>Don Barry</h3>
+                        <p>Pursuing M.S in Information Systems</p>
+                    </div>
+                </article>
+
+            </div>
+            <div align="center" style="background:#CCCCCC;position: fixed;
+    bottom: -4%;
+    width: 100%;">
+            <a style="float:left" class="btn jumper" href="#main-header">Home</a>
+            <a style="margin-left:auto;
+  margin-right:auto;" href="https://github.com/donbarry/ngcoursesreview">GitHub Link</a>
+<a style="float:right" class="btn jumper" href="#summary">course</a>
+            </div>
+ 
+            
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-sanitize.min.js"></script>
+    <script src="http://gregpike.net/demos/angular-local-storage/src/angular-local-storage.js"></script>
+    <script src="https://cdn.firebase.com/js/client/1.1.3/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.8.2/angularfire.min.js"></script>
+
+    <script type="text/javascript" src="js.js"></script>
+
+    <script src="app.js"></script>
+    <script src="factories/AuthFactory.js"></script>
+    <script src="factories/ReviewFactory.js"></script>
+    <script src="factories/BookFactory.js"></script>
+    <script src="controllers/maincontroller.js"></script>
+    <script src="controllers/logincontroller.js"></script>
+
+        <script src="factories/bookservice.js"></script>
+        <script src="controllers/bookController.js"></script>
+        <script>
+        $(".jumper").on("click", function( e ) {
+    
+    e.preventDefault();
+
+    $("body, html").animate({ 
+        scrollTop: $( $(this).attr('href') ).offset().top 
+    }, 600);
+    
+});
+        </script>
+
+    </body>
+
+</html>

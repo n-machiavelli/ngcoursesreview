@@ -7,8 +7,106 @@ angular.module('ngReviewApp')
 		var reviews=[];
 		var courses=[];
 		var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/");     
-		
+		var apiUrl="api/v1/";
 
+		this.getCoursesMongo=function getCoursesMongo(){
+			var deferred=$q.defer();
+			var request = $http({
+                method: 'GET',
+                url: apiUrl + "courses/list",
+                //headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            });
+			//vm.reviews=ReviewFactory.getReviews(courseID);
+			return deferred.promise;
+		};
+		this.addCourseMongo=function addCourseMongo(courseID,courseName,bookTitle,bookAuthor){
+			var deferred=$q.defer();
+			var request = $http({
+                method: 'POST',
+                url: apiUrl + "courses/add",
+                data: {
+                	courseID: courseID,
+                	courseName: courseName,
+                	bookTitle: bookTitle,
+                	bookAuthor: bookAuthor
+                }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+            	message='Course Added Successfully';
+               console.log("Course Added to the database successfully");
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            })
+            	.error(function(error){
+            		console.log(error);
+            		deferred.reject(error);
+            	});
+			//vm.reviews=ReviewFactory.getReviews(courseID);
+			//console.log("Review has been added");
+			return deferred.promise;			
+		}
+		this.updateCourseMongo=function updateCourseMongo(courseID,newCourseName){
+			var deferred=$q.defer();
+			var request = $http({
+                method: 'POST',
+                url: apiUrl + "courses/update",
+                data: {
+                	courseID: courseID,
+                	courseName: courseName
+                }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+            	message='Course Updated Successfully';
+               console.log("Course Updated successfully");
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            })
+            	.error(function(error){
+            		console.log(error);
+            		deferred.reject(error);
+            	});
+			//vm.reviews=ReviewFactory.getReviews(courseID);
+			//console.log("Review has been added");
+			return deferred.promise;			
+		}
+		this.deleteCourseMongo=function deleteCourseMongo(courseID){
+			var deferred=$q.defer();
+			var request = $http({
+                method: 'POST',
+                url: apiUrl + "courses/delete",
+                data: {
+                	courseID: courseID
+                }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+            	message='Course Deleted Successfully';
+               console.log("Course Deleted successfully");
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            })
+            	.error(function(error){
+            		console.log(error);
+            		deferred.reject(error);
+            	});
+			//vm.reviews=ReviewFactory.getReviews(courseID);
+			//console.log("Review has been added");
+			return deferred.promise;			
+		}		
 		this.getReviews=function getReviews(courseID){
 			var deferred=$q.defer();
 			var request = $http({

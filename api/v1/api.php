@@ -35,10 +35,15 @@ class API
      * Allow for CORS, assemble and pre-process the data
      */
     public function __construct($request) {
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: *");
-        header("Content-Type: application/json");
-
+        //header("Access-Control-Allow-Origin: *");
+        //header("Access-Control-Allow-Methods: *");
+        //header("Content-Type: application/json");
+             header('Access-Control-Allow-Origin: *');
+             header("Access-Control-Allow-Credentials: true"); 
+             header('Access-Control-Allow-Headers: X-Requested-With');
+             header('Access-Control-Allow-Headers: Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization');
+             header('Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS, PUT'); // http://stackoverflow.com/a/7605119/578667
+             header('Access-Control-Max-Age: 86400'); 
         $this->args = explode('/', rtrim($request, '/'));
         $this->endpoint = array_shift($this->args);
         if (array_key_exists(0, $this->args) && !is_numeric($this->args[0])) {
@@ -73,6 +78,7 @@ class API
             $this->_response('Invalid Method', 405);
             break;
         }
+
     }
 
     public function processAPI() {
@@ -155,24 +161,29 @@ class API
         //return $coursetofind;
     }
     if ($this->verb=="add"){
-        //$request = json_decode($this->request);
-        $request=json_decode($this->request);
-        
+        $request = json_decode($this->request);
+        //$request = ($this->request);
+        //$request=$_POST;
         /*
         BELOW will work for form urlencoded where the post data is actually in $_POST so array format. 
-        changed because using json so json decode returns object
+        changed because using json so json decode returns object 
         $uid = $request["uid"];
         $courseID = $request["courseID"];
         $reviewTitle = $request["reviewTitle"];
         $bookTitle = $request["bookTitle"];
         $reviewBody = $request["reviewBody"];
+        $userlocation=$request["userlocation"];
+        $email=$request["email"];
         */
+        
         $uid = $request->uid;
+        $email=$request->email;
         $courseID = $request->courseID;
         $reviewTitle = $request->reviewTitle;
         $bookTitle = $request->bookTitle;
         $reviewBody = $request->reviewBody;
-
+        $userLocation=$request->userLocation;
+        
         $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
         //echo "Connection to database successfully";
         
@@ -183,26 +194,94 @@ class API
         //echo "Collection selected succsessfully";
         $document = array( 
             "uid" => $uid, 
+            "email" => $email,
             "courseID" => $courseID,
             "reviewTitle" => $reviewTitle,
             "bookTitle" => $bookTitle,
-            "reviewBody" => $reviewBody 
+            "reviewBody" => $reviewBody,
+            "userLocation"=> $userLocation
         );
         $collection->insert($document);
         return "Inserted.";
-        
-       
     }
+       
+}
+  protected function courses(){
+    // Connect to test database
+        $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+        //echo "Connection to database successfully<br/>";
+        
+        $db = $m->coursereviews;
+        //echo "Database coursereviews selected<br/>";
+        
+        $collection = $db->courses;
+        //echo "Collection selected successfully<br/>";
+        if ($this->verb=="list"){
+            $arr=[];
+            //$coursetofind=json_decode($this->request);
+            //$coursetofind=$coursetofind->courseID;
+            $cursor = $collection->find();
+            foreach ($cursor as $document) {
+                $arr[]=$document;  //$cursor->getNext();
+            }
+            return $arr ; // json_encode($arr);
+        }
+        if ($this->verb=="add"){
+            $request = json_decode($this->request);
+            $courseName=$request->courseName;
+            $courseID = $request->courseID;
+            $bookTitle = $request->bookTitle;
+            $bookAuthor = $request->bookAuthor;
+            
+            $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+            //echo "Connection to database successfully";
+            
+            $db = $m->coursereviews;
+            //echo "Database coursereview selected";
+            
+            $collection = $db->courses;
+            //echo "Collection selected succsessfully";
+            $document = array( 
+                "courseID" => $courseID, 
+                "courseName" => $courseName,
+                "bookTitle" => $bookTitle,
+                "bookAuthor" => $bookAuthor
+            );
+            $collection->insert($document);
+            return "Inserted.";
+        }
+        if ($this->verb=="delete"){
+            $request = json_decode($this->request);
+            $coursetodelete=$request->courseID;
+            $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+            //echo "Connection to database successfully";
+            $db = $m->coursereviews;
+            //echo "Database coursereview selected";
+            $collection = $db->courses;
+            //echo "Collection selected succsessfully";
+            $cursor = $collection->remove(array('courseID' => $coursetodelete));
+            return "Deleted.";
+        }
+        if ($this->verb=="update"){
+            $request = json_decode($this->request);
+            $coursetoupdate=$request->courseID;
+            $newcoursename=$request->newcoursename;
+            $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+            //echo "Connection to database successfully";
+            $db = $m->coursereviews;
+            //echo "Database coursereview selected";
+            $collection = $db->courses;
+            //echo "Collection selected succsessfully";
+            $retval = $collection->findAndModify(
+                array('courseID' => $coursetoupdate)
+                ,array('$set'=>array('courseName'=>$newcoursename)),
+                null,
+                null);
 
-/*    foreach ($cursor as $document) {
-      echo "<div>";
-      echo "UID :" . $document['uid'] . "<br/>";
-      echo "Title :" . $document['rtitle'] . "<br/>";
-      echo "Book Title :" . $document['bktitle'] . "<br/>";
-      echo "Title Body :" . $document['btitle'] . "<br/>";
-      
-      echo "</div><br/><br/>";
-*/      
+            return "Updated.";
+        }
+
+
     }    
   
 }
@@ -217,6 +296,11 @@ try {
     $origin=$_SERVER['HTTP_ORIGIN'];
     //$API = new API($_REQUEST['request'], $_SERVER['HTTP_ORIGIN']);
     $API = new API($req,$origin);
+    //print_r (json_decode($API->request));
+    //print_r (json_decode('{"a":1,"b":2,"c":3,"d":4,"e":5}'));
+    //echo ($API->request->uid);
+    //echo ($API->request);
+    //print_r(json_decode($API->request));
     //print_r (explode('/', rtrim($req, '/')));
     //echo array_shift(explode('/', rtrim($req, '/')));
     echo $API->processAPI();
