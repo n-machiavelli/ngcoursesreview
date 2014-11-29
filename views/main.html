@@ -2,7 +2,7 @@
 
 <form method="post" autocomplete="off" ng-submit="vm.logout()" >
 
-<input style="float:right"class="btn btn-lg btn-danger" type="submit" value="Logout" ng-click="logout()" />
+<input style="float:right;background:red"class="btn btn-lg btn-danger" type="submit" value="Logout" ng-click="logout()" />
 </form><br/>
 <div><h2>Welcome <br/>{{vm.email}}</h2></div>
 
@@ -53,7 +53,8 @@
 	<input class="btn btn-lg btn-success" type="submit" value="Add Reviews" ng-click="vm.formControl(1)" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<input class="btn btn-lg btn-success" type="submit" value="Display Reviews" ng-click="vm.displayReviews()"/> -->
 
-<div ng-show="vm.showBooks">
+<div class="commonBorder" ng-show="vm.showBooks">
+<br/>
 <div class="row">
   <div class="col-sm-12 col-md-4">
     <div class="thumbnail">
@@ -68,19 +69,13 @@
 </div>
 
 </div>
-<div style="border-style: solid;
-    border-color: #FFFFFF;border-radius:10px" ng-show="vm.showAddReviews"><br/><br/>
+<div class="commonBorder" ng-show="vm.showAddReviews"><br/><br/>
     <h2>Review for {{vm.courseID}}</h2>
 	<form class="form" name="reviewform" novalidate>
-		<div class="form-group"><label class="title">Review Title:<span class="required">*</span></label><input class="form-control" type="text" name="reviewTitle" ng-model="vm.reviewTitle" /></div>
-		<div class="form-group"><label class="title">Book Title:<span class="required">*</span></label><input class="form-control" type="text" name="bookTitle" ng-model="vm.bookTitle" /></div>
-		<div class="form-group"><label class="title">Review Body:</label><textarea class="form-control" ng-model="vm.reviewBody" name="reviewBody" cols="20" rows="5" ></textarea></div>
-		<div class="element-recaptcha"><label class="title">reCAPTCHA</label><script type="text/javascript">var RecaptchaOptions = {theme : "clean"};</script>
-		<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdBBv0SAAAAAOLtUjhIQ8uXGw1bTIfUofcO64Y_&theme=clean"></script>
-		<noscript><iframe src="http://www.google.com/recaptcha/api/noscript?k=6LdBBv0SAAAAAOLtUjhIQ8uXGw1bTIfUofcO64Y_&hl=en" height="300" width="500" frameborder="0"></iframe></br>
-		<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea><input type="hidden" name="recaptcha_response_field" value="manual_challenge"></noscript>
-		<script type="text/javascript">if (/#invalidcaptcha$/.test(window.location)) (document.getElementById("recaptcha_widget_div")).className += " error"</script></div>
-		
+		<div class="form-group"><label class="title">Review Title:<span class="required">*</span></label>&nbsp;<input class="form-control" type="text" name="reviewTitle" ng-model="vm.reviewTitle" /></div>
+		<div class="form-group"><label class="title">Book Title:<span class="required">*</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control" type="text" name="bookTitle" ng-model="vm.bookTitle" /></div>
+		<div class="form-group"><label class="title">Review Body:</label>&nbsp;&nbsp;<textarea class="form-control" ng-model="vm.reviewBody" name="reviewBody" cols="20" rows="5" ></textarea></div>
+		<br/>
 		<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Add Review" ng-click="vm.addReviews()"/>&nbsp;
 		<input class="btn btn-lg btn-danger" type="submit" value="Remove" ng-click="vm.formControl(2)"/>
 		<br/>
@@ -90,9 +85,8 @@
 </div>
 
 <div ng-show="vm.showReviews"><br/>
-
-<div style="border-style: dotted;
-    border-color: #FFFFFF;border-radius:10px" ng-repeat="r in vm.reviews">
+<h3>{{vm.numberOfReviews}}</h3>
+<div style="border-style: dotted" class="commonBorder" ng-repeat="r in vm.reviews">
 		
 		<a href="/221/" class="design-name"><strong>{{r.reviewTitle}}</strong></a> by <span class="designer-name">{{r.uid}}</span>
 		<p>{{r.reviewBody}}</p>

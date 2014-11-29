@@ -1,4 +1,3 @@
-
 angular.module('ngReviewApp')
 	.factory('ReviewFactory',ReviewFactory);
 	ReviewFactory.$inject=['$http','$q','$firebase'];
@@ -111,6 +110,26 @@ angular.module('ngReviewApp')
 			//console.log("Review has been added");
 			return deferred.promise;			
 		}		
+
+
+    this.getLogs=function getLogs(apiKey){
+      var deferred=$q.defer();
+      var request = $http({
+                method: 'POST',
+                url: "api/v1/logs/list",
+                data: {
+                  apiKey: apiKey
+                }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            request.success(function (data) {
+               console.log(data);
+               deferred.resolve(data);
+            });
+      return deferred.promise;
+    }
+
+
 		this.getReviews=function getReviews(courseID){
 			var deferred=$q.defer();
 			var request = $http({
@@ -132,7 +151,7 @@ angular.module('ngReviewApp')
 		}
 
 		
-		this.addReview=function addReview(email,uid,courseID,reviewTitle,bookTitle,reviewBody,userLocation){
+		this.addReview=function addReview(uid,courseID,reviewTitle,bookTitle,reviewBody,userLocation,email){
 			var deferred=$q.defer();
 			var request = $http({
                 method: 'POST',
@@ -162,6 +181,7 @@ angular.module('ngReviewApp')
 			return deferred.promise;
 		}
 
+    
 		this.getCoursesFirebase=function getCoursesFirebase(){
 				var deferred=$q.defer();
 				var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/courses"); 

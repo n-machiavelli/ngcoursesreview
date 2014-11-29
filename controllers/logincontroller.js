@@ -11,7 +11,47 @@ function LoginController(AuthFactory,$location){
 	var vm=this;
     //var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/");	
 	vm.msg='';
+    vm.role='User';
 	vm.authData={};
+
+
+    vm.loginDirect=function(){
+        if(vm.role=='User')
+        {
+            console.log("User");
+            vm.login();
+        }
+        else if(vm.role=='Admin')
+        {
+            console.log("Admin");
+            vm.loginAdmin();
+        }
+    };
+
+     vm.loginAdmin=function(){
+        var promise=AuthFactory.login(vm.email,vm.password);
+        promise.then(function(authData){
+        if (!(jQuery.isEmptyObject(authData))){
+                //vm.msg=AuthFactory.message;
+                console.log("$location move");
+                console.log(authData);
+                vm.authData=authData;
+                $location.path("/admin");
+        }else{
+            vm.msg="Empty auth";//AuthFactory.message;
+        }           
+        },function(reason){
+            vm.msg="Failed : " + reason + ":" + AuthFactory.message;
+        },function(update){
+            vm.msg="updated";
+        })
+        //if(!$scope.$$phase) $scope.$apply();
+        // $scope.$apply(
+        //     vm.message = "a message"
+        // );
+        console.log("vm msg " + vm.msg);
+    };
+
     vm.login=function(){
         var promise=AuthFactory.login(vm.email,vm.password);
         promise.then(function(authData){
@@ -19,10 +59,8 @@ function LoginController(AuthFactory,$location){
         		//vm.msg=AuthFactory.message;
         		console.log("$location move");
         		console.log(authData);
-                vm.msg="Logged In";
         		vm.authData=authData;
                 $location.path("/reviews");
-                
         }else{
         	vm.msg="Empty auth";//AuthFactory.message;
         }        	
@@ -31,7 +69,6 @@ function LoginController(AuthFactory,$location){
         },function(update){
         	vm.msg="updated";
         })
-        $scope.$apply;
         //if(!$scope.$$phase) $scope.$apply();
         // $scope.$apply(
         //     vm.message = "a message"

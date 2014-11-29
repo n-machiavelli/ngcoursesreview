@@ -52,6 +52,13 @@ angular.module('ngReviewApp',['ngRoute','firebase','LocalStorageModule','booksAp
         controller: 'booksAppCtrl',
         
     })
+        .when('/admin', {
+        templateUrl: 'views/admin.html',
+        controller: 'MainController',
+        controllerAs: 'vm',
+        authRequired: true
+        
+    })
 .otherwise({redirectTo: '/'});
     
 

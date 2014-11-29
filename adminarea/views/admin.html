@@ -1,0 +1,121 @@
+<form method="post" autocomplete="off" ng-submit="vm.logout()" >
+
+<input style="float:right;background:red" class="btn btn-lg btn-danger" type="submit" value="Logout" ng-click="logout()" />
+</form><br/>
+
+
+<h1>Hello Admin</h1><br/>
+<input class="btn btn-lg btn-success" style="background:orange" type="submit" value="UserLogs" ng-click="vm.adminFunction(5)"/>
+<br/><br/>
+<div class="commonBorder">
+    <h3>Courses Management</h3>
+<input class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;Add Course&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.adminFunction(1)" />&nbsp;&nbsp;&nbsp;
+<input class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;Read Course&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.adminFunction(2)" />&nbsp;&nbsp;&nbsp;
+<input class="btn btn-lg btn-success" type="submit" value="Update Course" ng-click="vm.adminFunction(3)"/>&nbsp;&nbsp;&nbsp;
+<input class="btn btn-lg btn-success" type="submit" value="Delete Course" ng-click="vm.adminFunction(4)"/><br/><br/>
+</div>
+
+
+	<h1>{{vm.adminWork}}</h1>
+
+
+	<div class="commonBorder" ng-show="vm.showAddCourse"><br/><br/>
+    <h2>Add a new Course</h2>
+
+	<form name="newCourseform" novalidate>
+		
+		<div><label class="title">Course ID:<span class="required">*</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control" type="text" ng-model="vm.newCourseId" required="required"/></div>
+
+		<div><label class="title">Course Name:<span class="required">*</span></label><input class="form-control" type="text" name="courseName" ng-model="vm.newCourseName" required="required"/></div>
+		<div class="form-group"><label class="title">Book Title:<span class="required">*</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control" type="text" name="bookTitle" ng-model="vm.newCourseBookTitle" required="required"/></div>
+		<div class="form-group"><label class="title">Book Author:</label>&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control" type="text" name="bookTitle" ng-model="vm.newCourseBookAuthor" required="required"/></div>
+		<br/>
+		<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Add Course" ng-click="vm.addCourseMongo()"/>&nbsp;
+		
+		<br/>
+		<br/>
+		</div>
+</form>
+</div>
+
+
+	<div ng-show="vm.showGetCourses"><br/>
+
+<div style="border-style: dotted" class="commonBorder" ng-repeat="val in vm.courses">
+		<h3><strong>{{val.courseID}}</strong></h3><br/>
+		<h4>{{val.courseName}}</h4><br/><h5>Book<br/>{{val.bookTitle}}</h5><br/>by {{val.bookAuthor}}
+	
+
+</div>
+</div>
+
+
+<div ng-show="vm.showUpdateCourse"><br/>
+
+<div><label class="title">List of Courses:<span class="required">*</span></label>
+	<select ng-model="vm.courseID" class="form-control" id="course" required="required">
+		<option value="{{course.courseID}}" ng-model="vm.updateCourseName" ng-repeat="course in vm.courses">{{course.courseName}}</option>
+	</select>
+	<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Update" ng-click="vm.updateCourseMongo(1)"/>
+	<br/><br/>
+	<div class="commonBorder" ng-show="vm.showUpdateBar">
+<br/>
+	<div><label class="title">Course ID:<span class="required">*</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control" type="text" ng-model="vm.courseID" required="required" placeholder="{{vm.courseID}}"/></div>
+
+		<div><label class="title">Course Name:<span class="required">*</span></label><input class="form-control" type="text" ng-model="vm.updateCourseName" required="required" placeholder="Enter New Name"/></div>
+
+		<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Commit" ng-click="vm.updateCourseMongo(2)"/><br/><br/>
+
+		
+	</div>		
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div ng-show="vm.showDeleteCourse"><br/>
+
+<div><label class="title">List of Courses:<span class="required">*</span></label>
+	<select ng-model="vm.courseID" class="form-control" id="course" required="required">
+		<option value="{{course.courseID}}" ng-repeat="course in vm.courses">{{course.courseName}}</option>
+	</select>
+	<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Delete" ng-click="vm.deleteCourseMongo()"/>&nbsp;<br/>
+	
+
+</div>
+</div>
+</div>
+
+<div ng-show="vm.showUserLogs"><br/>
+
+<div><label class="title">API Key:<span class="required">*</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control" type="text" ng-model="vm.apiKey" required="required" placeholder="{{vm.courseID}}"/>
+&nbsp;&nbsp;<input class="btn btn-lg btn-success" type="submit" value="Get Logs" ng-click="vm.adminFunction(5)"/>
+</div>
+
+<br/>
+<table style="width:100%" class="commonBorder">
+<tr>
+<th>apiKey</th>
+<th>action</th>
+<th>Date</th>
+<th>Details</th>
+</tr>
+
+<tr ng-repeat="logs in vm.userLogs"><td>{{logs.apiKey}}</td><td>{{logs.action}}</td><td>{{logs.date}}</td><td><input class="btn btn-lg btn-success" type="submit" value="Details" ng-click="vm.logDetails(logs)"/></td></tr>
+</table>
+
+</div>
+<div class="commonBorder" ng-show="vm.showLogDetails">UID: {{vm.logs.parameters.uid}}<br/>
+Email: {{vm.logs.parameters.email}}<br/>
+CourseId: {{vm.logs.parameters.courseID}}<br/><br/>
+Review Title: {{vm.logs.parameters.reviewTitle}}<br/>
+Book Title: {{vm.logs.parameters.bookTitle}}<br/>
+<input class="btn btn-lg btn-success" type="submit" value="Back" ng-click="vm.adminFunction(5)"/><br/><br/>
+</div>
+
+
+
+

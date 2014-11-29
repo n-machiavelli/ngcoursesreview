@@ -42,13 +42,13 @@ angular.module('ngReviewApp')
 			return deferred.promise;
 		}
 
-		this.getBook=function getBook(courses,courseID){
+		this.getBook=function getBook(i,courses){
 				//var imgurl;
 				var deferred=$q.defer();				
-				console.log("in book factory");
+				console.log("in book factory"+courses[i]);
 				
-						bookName=courses[courseID].books[0].name;  //one book
-						bookAuthor=courses[courseID].books[0].author;
+						bookName=courses[i].bookTitle;  //one book
+						bookAuthor=courses[i].booksAuthor;
 						console.log(bookName);
 						var promise=this.getEbayDetails(bookName);
 

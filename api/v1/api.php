@@ -1,4 +1,10 @@
 <?php
+/** Class: API 
+ * This class encapsulates an API call
+ * @author Uche Barry Ajokubi
+ * @author Aayush Agrawal
+ * @version 1.04 Nov 29, 2014.
+ */
 class API
 {
     /**
@@ -32,7 +38,8 @@ class API
 
     /**
      * Constructor: __construct
-     * Allow for CORS, assemble and pre-process the data
+     * @param $request This is the encapsulation of the POST or GET request.
+     * Allow for CORS, assemble and pre-process the data.
      */
     public function __construct($request) {
              header('Access-Control-Allow-Origin: *');
@@ -80,7 +87,7 @@ class API
     /**
      * Method: processAPI
      * Main entry point for $API class after constructor. Calls appropriate endpoint method and returns the response based on request parameters.
-     * @return API response is returned
+     * @return API response is returned.
      */
     public function processAPI() {
         if ((int)method_exists($this, $this->endpoint) > 0) {
@@ -90,21 +97,21 @@ class API
     }
 
     /**
-     * Method: _response
-     * Sets the status header for a response (Default is "OK" - 200) then encodes $data to JSON for final response
-     * @param $data is the returned data from the endpoint
-     * @param $status is the HTTP status code for the response
-     * @return json encoded response
+     * Method: _response.
+     * Sets the status header for a response (Default is "OK" - 200) then encodes $data to JSON for final response.
+     * @param $data is the returned data from the endpoint.
+     * @param $status is the HTTP status code for the response.
+     * @return json encoded response.
      */
     private function _response($data, $status = 200) {
         header("HTTP/1.1 " . $status . " " . $this->_requestStatus($status));
         return json_encode($data);
     }
     /**
-     * Method: _cleanInputs
+     * Method: _cleanInputs.
      * Check for HTML tags in the request input and strips them using strip_tags.
-     * @param $data The input data from a request
-     * @return $clean_input stripped request input 
+     * @param $data The input data from a request.
+     * @return $clean_input stripped request input.
      */
     private function _cleanInputs($data) {
         $clean_input = Array();
@@ -118,10 +125,10 @@ class API
         return $clean_input;
     }
     /**
-     * Method: _requestStatus
-     * Convert a status code to its description
-     * @param $data The input data from a request
-     * @return status description string
+     * Method: _requestStatus.
+     * Convert a status code to its description.
+     * @param $data The input data from a request.
+     * @return status description string.
      */
     private function _requestStatus($code) {
         $status = array(  
@@ -133,10 +140,10 @@ class API
         return ($status[$code])?$status[$code]:$status[500]; 
     }    
     /**
-      * Method: logs
-      * This endpoint handles calls to /logs/list by retrieving the logs of a particular api key or all logs
-      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class
-      * @return array of logs
+      * Method: logs.
+      * This endpoint handles calls to /logs/list by retrieving the logs of a particular api key or all logs.
+      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class.
+      * @return array of logs.
       */
   protected function logs(){
     // Connect to database
@@ -167,13 +174,14 @@ class API
        
 }
     /**
-      * Method: reviews
+      * Method: reviews.
       * This endpoint handles calls to 
       * /reviews/list by retrieving the reviews of a particular courseID
-      * /reviews/add by adding the POSTed review object 
-      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class
-      * @return array of reviews if verb=list
-      * @return Insert message if verb=add
+      * /reviews/add by adding the POSTed review object.
+      * /reviews/delete by deleting the POSTed review object.
+      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class.
+      * @return array of reviews if verb=list.
+      * @return Insert message if verb=add.
       */
   protected function reviews(){
     // Connect to test database
@@ -231,6 +239,25 @@ class API
         $this->log($apiKey,"Inserted",$document,$m);
         return "Inserted.";
     }
+        if ($this->verb=="delete"){
+            $request = json_decode($this->request);
+            $reviewtodelete=$request->reviewID;
+            if ($this->validKeyPresent($request,$m)){
+                //go ahead
+                $apiKey=$request->apiKey;
+            }else{
+                return "Access Denied. You have no access to this functionality.";
+            }
+            //echo "Connection to database successfully";
+            $db = $m->coursereviews;
+            //echo "Database coursereview selected";
+            $collection = $db->coursereviews;
+            //echo "Collection selected succsessfully";
+            $cursor = $collection->remove(array('reviewID' => $reviewtodelete));
+            $this->log($apiKey,"Deleted",$reviewtodelete);
+
+            return "Deleted.";
+        }
        
 }
     /**
@@ -239,12 +266,12 @@ class API
       * /courses/list by retrieving the list of courses
       * /courses/add by adding the POSTed course object 
       * /courses/update by updating the POSTed course ID's coursename 
-      * /courses/delete by deleting the POSTed course ID 
-      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class
-      * @return array of courses if verb=list
-      * @return Insert message if verb=add
-      * @return Update message if verb=update
-      * @return Delete message if verb=delete
+      * /courses/delete by deleting the POSTed course ID.
+      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class.
+      * @return array of courses if verb=list.
+      * @return Insert message if verb=add.
+      * @return Update message if verb=update.
+      * @return Delete message if verb=delete.
       */
   protected function courses(){
     // Connect to test database
@@ -340,11 +367,11 @@ class API
 
     }    
     /**
-      * Method: validKeyPresent
-      * Check validity of an api Key
-      * @param $request is the POST request for the method to extract the api key from it (if it exists)
-      * @param $mongo is the database object created by the caller
-      * @return true if api key is found or if api key is inexistent/invalid
+      * Method: validKeyPresent.
+      * Check validity of an api Key.
+      * @param $request is the POST request for the method to extract the api key from it (if it exists).
+      * @param $mongo is the database object created by the caller.
+      * @return true if api key is found or if api key is inexistent/invalid.
       */    
     private function validKeyPresent($request,$mongo){
             if (isset($request->apiKey)){
@@ -361,12 +388,12 @@ class API
     }
     /**
       * Method: log
-      * Log an event to mongo database
-      * @param $apiKey is the apiKey being used for the action
+      * Log an event to mongo database.
+      * @param $apiKey is the apiKey being used for the action.
       * @param $action is the activity/method being logged such as "update"/"insert"...
-      * @param $parameters is the object being used. for example the course or review being added
-      * @param $mongo is the database object created by the caller
-      * @return true if api key is found or if api key is inexistent/invalid
+      * @param $parameters is the object being used. for example the course or review being added.
+      * @param $mongo is the database object created by the caller.
+      * @return true if api key is found or if api key is inexistent/invalid.
       */    
     private function log($apiKey,$action,$parameters,$mongo){
                 $db = $mongo->coursereviews;
