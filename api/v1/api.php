@@ -184,8 +184,12 @@ class API
         $reviewBody = $request->reviewBody;
         $userLocation=$request->userLocation;
         
-        $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
-        //echo "Connection to database successfully";
+            if ($this->validKeyPresent($request,$m)){
+                //go ahead
+                $apiKey=$request->apiKey;
+            }else{
+                return "Access Denied. You have no access to this functionality.";
+            }
         
         $db = $m->coursereviews;
         //echo "Database coursereview selected";
@@ -202,6 +206,7 @@ class API
             "userLocation"=> $userLocation
         );
         $collection->insert($document);
+        $this->log($apiKey,"Inserted",$document,$m);
         return "Inserted.";
     }
        
@@ -232,8 +237,12 @@ class API
             $courseID = $request->courseID;
             $bookTitle = $request->bookTitle;
             $bookAuthor = $request->bookAuthor;
-            
-            $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+            if ($this->validKeyPresent($request,$m)){
+                //go ahead
+                $apiKey=$request->apiKey;
+            }else{
+                return "Access Denied. You have no access to this functionality.";
+            }
             //echo "Connection to database successfully";
             
             $db = $m->coursereviews;
@@ -248,42 +257,81 @@ class API
                 "bookAuthor" => $bookAuthor
             );
             $collection->insert($document);
+            $this->log($apiKey,"Inserted",$document,$m);
             return "Inserted.";
         }
         if ($this->verb=="delete"){
             $request = json_decode($this->request);
             $coursetodelete=$request->courseID;
-            $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+            if ($this->validKeyPresent($request,$m)){
+                //go ahead
+                $apiKey=$request->apiKey;
+            }else{
+                return "Access Denied. You have no access to this functionality.";
+            }
             //echo "Connection to database successfully";
             $db = $m->coursereviews;
             //echo "Database coursereview selected";
             $collection = $db->courses;
             //echo "Collection selected succsessfully";
             $cursor = $collection->remove(array('courseID' => $coursetodelete));
+            $this->log($apiKey,"Deleted",$coursetodelete);
+
             return "Deleted.";
         }
         if ($this->verb=="update"){
             $request = json_decode($this->request);
-            $coursetoupdate=$request->courseID;
-            $newcoursename=$request->newcoursename;
-            $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+            $courseToUpdate=$request->courseID;
+            $newCourseName=$request->newCourseName;
+            if ($this->validKeyPresent($request,$m)){
+                //go ahead
+                $apiKey=$request->apiKey;
+            }else{
+                return "Access Denied. You have no access to this functionality.";
+            }
             //echo "Connection to database successfully";
             $db = $m->coursereviews;
             //echo "Database coursereview selected";
             $collection = $db->courses;
             //echo "Collection selected succsessfully";
             $retval = $collection->findAndModify(
-                array('courseID' => $coursetoupdate)
-                ,array('$set'=>array('courseName'=>$newcoursename)),
+                array('courseID' => $courseToUpdate)
+                ,array('$set'=>array('courseName'=>$newCourseName)),
                 null,
                 null);
-
+            $this->log($apiKey,"Updated",$courseToUpdate . " to " . $newCourseName ,$m);
             return "Updated.";
         }
 
 
     }    
-  
+    protected function validKeyPresent($request,$mongo){
+            if (isset($request->apiKey)){
+                $apiKey=$request->apiKey;
+                $db = $mongo->coursereviews;
+                //echo "Database coursereview selected";
+                $collection = $db->keys;
+                $apiFound = $collection->findOne(array('apiKey' => $apiKey));
+                if ($apiFound){
+                    return true;
+                }
+            }
+            return false;
+    }
+    protected function log($apiKey,$action,$parameters,$mongo){
+                $db = $mongo->coursereviews;
+                //echo "Database coursereview selected";
+                $collection = $db->logs;
+                //echo "Collection selected succsessfully";
+                $document = array( 
+                    "apiKey" => $apiKey, 
+                    "action" => $action,
+                    "parameters" => $parameters,
+                    "date" => date("Y-m-d H:i:s")
+                );
+                $collection->insert($document);
+                return true;
+    }
 }
 
 // Requests from the same server don't have a HTTP_ORIGIN header

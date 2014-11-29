@@ -21,6 +21,13 @@ angular.module('ngReviewApp')
           } else {
             // User account created successfully!
               message="successfully logged in." + authData;
+              ref.child('users').child(authData.uid).child('role').once('value',function(snapshot){
+                var role=snapshot.val();
+                console.log("role");
+                console.log(role);
+                authData.role=role;
+              });
+
               deferred.resolve(authData);
               //console.log(authData);
           }
@@ -65,12 +72,21 @@ angular.module('ngReviewApp')
         // user is logged out
         console.log("no login");
       }     
-    } 
+    }
+
     this.getAuthData=function(){
       var deferred=$q.defer();
       authData = ref.getAuth();
+
+
       if (authData)
-        deferred.resolve(authData);
+              ref.child('users').child(authData.uid).child('role').once('value',function(snapshot){
+                var role=snapshot.val();
+                console.log("role");
+                console.log(role);
+                authData.role=role;
+                deferred.resolve(authData);
+              });        
       else
         deferred.reject("No Auth");
       return deferred.promise;
@@ -80,6 +96,7 @@ angular.module('ngReviewApp')
         if (authData) {
           // save the user's profile into Firebase so we can list users,
           // use them in Security and Firebase Rules, and show profiles
+          authData.role="0000";
           ref.child('users').child(authData.uid).set(authData);
           deferred.resolve(authData);
         }else{

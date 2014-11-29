@@ -23,6 +23,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	var promise=AuthFactory.getAuthData();
 	
 	promise.then(function(authData){
+
 		vm.auth=authData;
 		console.log(authData.uid);
 		console.log(authData);
@@ -119,7 +120,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 
 	this.addReviews=function(){
 
-		var promise=ReviewFactory.addReview(this.auth.uid,this.courseID,this.reviewTitle,this.bookTitle,this.reviewBody);
+		var promise=ReviewFactory.addReview(this.auth.password.email,this.auth.uid,this.courseID,this.reviewTitle,this.bookTitle,this.reviewBody, "Browser");
 		promise.then(function(message){
 			console.log(message);
 			vm.message=message;

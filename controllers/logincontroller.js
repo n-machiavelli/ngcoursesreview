@@ -19,8 +19,10 @@ function LoginController(AuthFactory,$location){
         		//vm.msg=AuthFactory.message;
         		console.log("$location move");
         		console.log(authData);
+                vm.msg="Logged In";
         		vm.authData=authData;
                 $location.path("/reviews");
+                
         }else{
         	vm.msg="Empty auth";//AuthFactory.message;
         }        	
@@ -29,6 +31,7 @@ function LoginController(AuthFactory,$location){
         },function(update){
         	vm.msg="updated";
         })
+        $scope.$apply;
         //if(!$scope.$$phase) $scope.$apply();
         // $scope.$apply(
         //     vm.message = "a message"

@@ -8,6 +8,7 @@ angular.module('ngReviewApp')
 		var courses=[];
 		var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/");     
 		var apiUrl="api/v1/";
+		var apiKey="9a0554259914a86fb9e7eb014e4e5d52";
 
 		this.getCoursesMongo=function getCoursesMongo(){
 			var deferred=$q.defer();
@@ -34,7 +35,8 @@ angular.module('ngReviewApp')
                 	courseID: courseID,
                 	courseName: courseName,
                 	bookTitle: bookTitle,
-                	bookAuthor: bookAuthor
+                	bookAuthor: bookAuthor,
+                	apiKey: apiKey
                 }
                 ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
@@ -61,7 +63,8 @@ angular.module('ngReviewApp')
                 url: apiUrl + "courses/update",
                 data: {
                 	courseID: courseID,
-                	courseName: courseName
+                	newCourseName: newCourseName,
+                	apiKey: apiKey
                 }
                 ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
@@ -87,7 +90,8 @@ angular.module('ngReviewApp')
                 method: 'POST',
                 url: apiUrl + "courses/delete",
                 data: {
-                	courseID: courseID
+                	courseID: courseID,
+                	apiKey: apiKey
                 }
                 ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
@@ -115,7 +119,7 @@ angular.module('ngReviewApp')
                 data: {
                 	courseID: courseID
                 }
-                //headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             /* Check whether the HTTP Request is Successfull or not. */
             request.success(function (data) {
@@ -128,19 +132,22 @@ angular.module('ngReviewApp')
 		}
 
 		
-		this.addReview=function addReview(uid,courseID,reviewTitle,bookTitle,reviewBody){
+		this.addReview=function addReview(email,uid,courseID,reviewTitle,bookTitle,reviewBody,userLocation){
 			var deferred=$q.defer();
 			var request = $http({
                 method: 'POST',
                 url: "api/v1/reviews/add",
                 data: {
                 	uid: uid,
+                	email: email,
                 	courseID: courseID,
                 	reviewTitle: reviewTitle,
                 	bookTitle: bookTitle,
-                	reviewBody: reviewBody
+                	reviewBody: reviewBody,
+                	userLocation: userLocation,
+                	apiKey: apiKey
                 }
-                //headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             /* Check whether the HTTP Request is Successfull or not. */
             request.success(function (data) {
@@ -154,17 +161,7 @@ angular.module('ngReviewApp')
 			console.log("Review has been added");
 			return deferred.promise;
 		}
-		this.getCourses=function getCourses(){
-			courses=[
-						{courseID:"IT467",courseName:"Human Factors"},
-						{courseID:"IT478",courseName:"Advanced Database"},
-						{courseID:"IT353",courseName:"Web Technologies"},
-						{courseID:"IT354",courseName:"Advanced Web Technologies"},
-						{courseID:"IT432",courseName:"System Analysis"},
-						{courseID:"IT377",courseName:"Telecoms"}
-					];
-			return courses;
-		};
+
 		this.getCoursesFirebase=function getCoursesFirebase(){
 				var deferred=$q.defer();
 				var ref = new Firebase("https://dazzling-fire-6822.firebaseio.com/courses"); 
@@ -182,35 +179,6 @@ angular.module('ngReviewApp')
 				return deferred.promise;
 		};
 
-		this.setCourses=function setCourses(){
-			console.log("here set courses");
-			coursesRef=ref.child("courses");
-			coursesRef.set({
-			  IT467: {
-			    courseID: "IT467",
-			    courseName: "Human Factors"
-			  },
-			  IT478: {
-			    courseID: "IT478",
-			    courseName: "Advanced Database"
-			  },
-			  IT353: {
-			    courseID: "IT353",
-			    courseName: "Web Technologies"
-			  },
-			  IT354: {
-			    courseID: "IT354",
-			    courseName: "Advanced Web Technologies"
-			  },
-			  IT432: {
-			    courseID: "IT432",
-			    courseName: "System Analysis"
-			  },
-			  IT377: {
-			    courseID: "IT377",
-			    courseName: "Telecoms"
-			  }
-			});		
-		};
+
 		return this;
 	}
