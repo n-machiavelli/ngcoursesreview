@@ -133,9 +133,10 @@ class API
         return ($status[$code])?$status[$code]:$status[500]; 
     }    
     /**
-      * Method: _cleanInputs
-      * Check for HTML tags in the request input and strips them using strip_tags.
-      * @param $data The input data from a request
+      * Method: logs
+      * This endpoint handles calls to /logs/list by retrieving the logs of a particular api key or all logs
+      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class
+      * @return array of logs
       */
   protected function logs(){
     // Connect to database
@@ -165,7 +166,15 @@ class API
     }
        
 }
-
+    /**
+      * Method: reviews
+      * This endpoint handles calls to 
+      * /reviews/list by retrieving the reviews of a particular courseID
+      * /reviews/add by adding the POSTed review object 
+      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class
+      * @return array of reviews if verb=list
+      * @return Insert message if verb=add
+      */
   protected function reviews(){
     // Connect to test database
     $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
@@ -178,38 +187,17 @@ class API
     //echo "Collection selected successfully<br/>";
     if ($this->verb=="list"){
         $arr=[];
-        //$coursetofind=json_decode($this->request);//$this->args;
-        //$coursetofind=$this->request["courseID"]; //see comment on "add"
         $coursetofind=json_decode($this->request);
-        //$coursetofind=$this->request->courseID;
         $coursetofind=$coursetofind->courseID;
         $cursor = $collection->find(array('courseID' => $coursetofind));
-        //$cursor = $collection->find();
         // iterate cursor to display title of documents
         foreach ($cursor as $document) {
-            $arr[]=$document;  //$cursor->getNext();
+            $arr[]=$document;
         }
         return $arr ; // json_encode($arr);
-        //return json_encode($cursor);
-        //return array('courseID' => $coursetofind);
-        //return $coursetofind;
     }
     if ($this->verb=="add"){
         $request = json_decode($this->request);
-        //$request = ($this->request);
-        //$request=$_POST;
-        /*
-        BELOW will work for form urlencoded where the post data is actually in $_POST so array format. 
-        changed because using json so json decode returns object 
-        $uid = $request["uid"];
-        $courseID = $request["courseID"];
-        $reviewTitle = $request["reviewTitle"];
-        $bookTitle = $request["bookTitle"];
-        $reviewBody = $request["reviewBody"];
-        $userlocation=$request["userlocation"];
-        $email=$request["email"];
-        */
-        
         $uid = $request->uid;
         $email=$request->email;
         $courseID = $request->courseID;
@@ -245,6 +233,19 @@ class API
     }
        
 }
+    /**
+      * Method: courses
+      * This endpoint handles calls to 
+      * /courses/list by retrieving the list of courses
+      * /courses/add by adding the POSTed course object 
+      * /courses/update by updating the POSTed course ID's coursename 
+      * /courses/delete by deleting the POSTed course ID 
+      * @param no parameters. like all endpoints, the POST arguments are in the $request property of $API class
+      * @return array of courses if verb=list
+      * @return Insert message if verb=add
+      * @return Update message if verb=update
+      * @return Delete message if verb=delete
+      */
   protected function courses(){
     // Connect to test database
         $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
@@ -277,7 +278,6 @@ class API
             }else{
                 return "Access Denied. You have no access to this functionality.";
             }
-            //echo "Connection to database successfully";
             
             $db = $m->coursereviews;
             //echo "Database coursereview selected";
@@ -339,7 +339,14 @@ class API
 
 
     }    
-    protected function validKeyPresent($request,$mongo){
+    /**
+      * Method: validKeyPresent
+      * Check validity of an api Key
+      * @param $request is the POST request for the method to extract the api key from it (if it exists)
+      * @param $mongo is the database object created by the caller
+      * @return true if api key is found or if api key is inexistent/invalid
+      */    
+    private function validKeyPresent($request,$mongo){
             if (isset($request->apiKey)){
                 $apiKey=$request->apiKey;
                 $db = $mongo->coursereviews;
@@ -352,7 +359,16 @@ class API
             }
             return false;
     }
-    protected function log($apiKey,$action,$parameters,$mongo){
+    /**
+      * Method: log
+      * Log an event to mongo database
+      * @param $apiKey is the apiKey being used for the action
+      * @param $action is the activity/method being logged such as "update"/"insert"...
+      * @param $parameters is the object being used. for example the course or review being added
+      * @param $mongo is the database object created by the caller
+      * @return true if api key is found or if api key is inexistent/invalid
+      */    
+    private function log($apiKey,$action,$parameters,$mongo){
                 $db = $mongo->coursereviews;
                 //echo "Database coursereview selected";
                 $collection = $db->logs;
@@ -378,15 +394,7 @@ try {
     $origin=$_SERVER['HTTP_ORIGIN'];
     //$API = new API($_REQUEST['request'], $_SERVER['HTTP_ORIGIN']);
     $API = new API($req,$origin);
-    //print_r (json_decode($API->request));
-    //print_r (json_decode('{"a":1,"b":2,"c":3,"d":4,"e":5}'));
-    //echo ($API->request->uid);
-    //echo ($API->request);
-    //print_r(json_decode($API->request));
-    //print_r (explode('/', rtrim($req, '/')));
-    //echo array_shift(explode('/', rtrim($req, '/')));
     echo $API->processAPI();
-    //print_r($API->processAPI());
     
 } catch (Exception $e) {
     echo $req;
