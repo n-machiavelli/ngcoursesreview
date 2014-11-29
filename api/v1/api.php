@@ -35,9 +35,6 @@ class API
      * Allow for CORS, assemble and pre-process the data
      */
     public function __construct($request) {
-        //header("Access-Control-Allow-Origin: *");
-        //header("Access-Control-Allow-Methods: *");
-        //header("Content-Type: application/json");
              header('Access-Control-Allow-Origin: *');
              header("Access-Control-Allow-Credentials: true"); 
              header('Access-Control-Allow-Headers: X-Requested-With');
@@ -80,7 +77,11 @@ class API
         }
 
     }
-
+    /**
+     * Method: processAPI
+     * Main entry point for $API class after constructor. Calls appropriate endpoint method and returns the response based on request parameters.
+     * @return API response is returned
+     */
     public function processAPI() {
         if ((int)method_exists($this, $this->endpoint) > 0) {
             return $this->_response($this->{$this->endpoint}($this->args));
@@ -88,11 +89,23 @@ class API
         return $this->_response("No Endpoint: $this->endpoint", 404);
     }
 
+    /**
+     * Method: _response
+     * Sets the status header for a response (Default is "OK" - 200) then encodes $data to JSON for final response
+     * @param $data is the returned data from the endpoint
+     * @param $status is the HTTP status code for the response
+     * @return json encoded response
+     */
     private function _response($data, $status = 200) {
         header("HTTP/1.1 " . $status . " " . $this->_requestStatus($status));
         return json_encode($data);
     }
-
+    /**
+     * Method: _cleanInputs
+     * Check for HTML tags in the request input and strips them using strip_tags.
+     * @param $data The input data from a request
+     * @return $clean_input stripped request input 
+     */
     private function _cleanInputs($data) {
         $clean_input = Array();
         if (is_array($data)) {
@@ -104,7 +117,12 @@ class API
         }
         return $clean_input;
     }
-
+    /**
+     * Method: _requestStatus
+     * Convert a status code to its description
+     * @param $data The input data from a request
+     * @return status description string
+     */
     private function _requestStatus($code) {
         $status = array(  
             200 => 'OK',
@@ -114,24 +132,40 @@ class API
         ); 
         return ($status[$code])?$status[$code]:$status[500]; 
     }    
-
-  protected function example() {
-        if ($this->method == 'GET') {
-            return $this->args;
-            //put action for get here and return value
-            //http://localhost:4040/api-logger-class/api/v1/example/fire/barry/uche : endpoint:example, verb:fire, args:barry,uche
-            //return $this->verb;
-            //return $this->args; // "Your name is Barry" . $this->args . $this->endpoint ;//. $this->User->name;
-            //return $this->endpoint;
-        }elseif ($this->method=='POST'){
-            //return array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
-            //return $this->request["courseID"];
-            return $this->request->courseID; //error : trying to get property of non object
-            //return "POSTED to ".$this->endpoint;
-        } else {
-            return "Only accepts GET requests";
+    /**
+      * Method: _cleanInputs
+      * Check for HTML tags in the request input and strips them using strip_tags.
+      * @param $data The input data from a request
+      */
+  protected function logs(){
+    // Connect to database
+    $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
+    //echo "Connection to database successfully<br/>";
+    
+    $db = $m->coursereviews;
+    //echo "Database mydb selected<br/>";
+    
+    $collection = $db->logs;
+    //echo "Collection selected successfully<br/>";
+    if ($this->verb=="list"){
+        $arr=[];
+        if (isset($this->request)){
+            $apiKey=json_decode($this->request);
+            $apiKey=$apiKey->apiKey;
+            $cursor = $collection->find(array('apiKey' => $apiKey));
         }
-     }
+        else{
+            $cursor = $collection->find(array('apiKey' => $apiKey));
+        }
+        // iterate cursor to display title of documents
+        foreach ($cursor as $document) {
+            $arr[]=$document;  //$cursor->getNext();
+        }
+        return $arr ; // json_encode($arr);
+    }
+       
+}
+
   protected function reviews(){
     // Connect to test database
     $m = new MongoClient("mongodb://barry:barry@ds053310.mongolab.com:53310/coursereviews");
