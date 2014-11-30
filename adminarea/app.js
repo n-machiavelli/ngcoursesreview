@@ -21,6 +21,12 @@ angular.module('ngReviewApp',['ngRoute','firebase','LocalStorageModule','booksAp
         authRequired: true
         
     })
+         .when('/', {
+            templateUrl: 'views/login.html',
+            controller: 'LoginController',
+            controllerAs: 'vm'
+    })
+
 .otherwise({redirectTo: '/'});
     
 

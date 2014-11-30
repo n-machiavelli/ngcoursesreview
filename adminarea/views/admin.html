@@ -5,14 +5,16 @@
 
 
 <h1>Hello Admin</h1><br/>
-<input class="btn btn-lg btn-success" style="background:orange" type="submit" value="UserLogs" ng-click="vm.adminFunction(5)"/>
-<br/><br/>
+
+
 <div class="commonBorder">
     <h3>Courses Management</h3>
 <input class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;Add Course&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.adminFunction(1)" />&nbsp;&nbsp;&nbsp;
 <input class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;Read Course&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.adminFunction(2)" />&nbsp;&nbsp;&nbsp;
 <input class="btn btn-lg btn-success" type="submit" value="Update Course" ng-click="vm.adminFunction(3)"/>&nbsp;&nbsp;&nbsp;
 <input class="btn btn-lg btn-success" type="submit" value="Delete Course" ng-click="vm.adminFunction(4)"/><br/><br/>
+<h3>Other Tools</h3>
+<input class="btn btn-lg btn-success" style="background:orange" type="submit" value="UserLogs" ng-click="vm.adminFunction(5)"/>&nbsp;&nbsp;&nbsp;<input class="btn btn-lg btn-success" style="background:orange" type="submit" value="Reviews" ng-click="vm.adminFunction(6)"/><br/><br/>
 </div>
 
 
@@ -119,3 +121,27 @@ Book Title: {{vm.logs.parameters.bookTitle}}<br/>
 
 
 
+<div ng-show="vm.showDelReviews"><br/>
+
+<div><label class="title">List of Courses:<span class="required">*</span></label>
+	<select ng-model="vm.courseID" class="form-control" id="course" required="required">
+		<option value="{{course.courseID}}" ng-repeat="course in vm.courses">{{course.courseName}}</option>
+	</select>
+	<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Select" ng-click="vm.deleteReview(1,0)"/>&nbsp;<br/>
+
+	<div><br/>
+<h3>{{vm.numberOfReviews}}</h3>
+<div style="border-style: dotted" class="commonBorder" ng-repeat="r in vm.reviews">
+		
+		<a href="/221/" class="design-name"><strong>{{r.reviewTitle}}</strong></a> by <span class="designer-name">{{r.uid}}</span>
+		<p>{{r.reviewBody}}</p>
+		<p><i>Book : {{r.bookTitle}}</i><br/>
+		<div class="submit"><input class="btn btn-lg btn-success" type="submit" value="Delete" ng-click="vm.deleteReview(2,1)"/>
+		</p>
+	
+
+</div>
+
+</div>
+</div>
+</div>

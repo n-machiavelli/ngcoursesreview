@@ -20,7 +20,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	this.courses='';
 	this.logs='';
 	this.apiKey="9a0554259914a86fb9e7eb014e4e5d52";
-
+	this.showDelReviews=false;
 	//variable for switching Views between various CRUD operations
 	this.showAddReviews=false;
 	this.showBooks=false;
@@ -33,6 +33,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	this.showUserLogs=false;
 	this.showLogDetails=false;
 	this.updateCourseName='';
+
 	
 
 	this.adminWork='';
@@ -191,6 +192,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 			this.showUpdateCourse=false;
 			this.showDeleteCourse=false;
 			this.showUserLogs=false;
+			this.showDelReviews=false;
 		}
 		else if(crud==2)
 		{
@@ -202,6 +204,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 			this.showUpdateCourse=false;
 			this.showDeleteCourse=false;
 			this.showUserLogs=false;
+			this.showDelReviews=false;
 		}
 		else if(crud==3)
 		{
@@ -212,6 +215,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 			this.showUpdateCourse=true;
 			this.showDeleteCourse=false;
 			this.showUserLogs=false;
+			this.showDelReviews=false;
 		}
 		else if(crud==4)
 		{
@@ -222,6 +226,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 			this.showUpdateCourse=false;
 			this.showUserLogs=false;
 			this.showDeleteCourse=true;
+			this.showDelReviews=false;
 		}
 		else if(crud==5)
 		{
@@ -232,6 +237,17 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 			this.showUpdateCourse=false;
 			this.showDeleteCourse=false;
 			this.showUserLogs=true;
+			this.showDelReviews=false;
+		}
+		else if(crud==6)
+		{
+			this.adminWork="Manage Reviews";
+			this.showDelReviews=true;
+			this.showAddCourse=false;
+			this.showGetCourses=false;
+			this.showUpdateCourse=false;
+			this.showDeleteCourse=false;
+			this.showUserLogs=false;
 		}
 
 	};
@@ -311,15 +327,7 @@ this.getCourseMongo=function(){
 
 		if(type==1 && vm.courseID!='')
 		{
-			var promise=ReviewFactory.getCoursesMongo();
-	promise.then(function(data){
-		console.log(data);
-		vm.courses=data;	
-	}, function(reason){
-		console.log(reason)
-	}, function(update){
-		console.log("got notification" + update);
-	});
+			
 
 			this.showUpdateBar=true;
 		}
@@ -344,6 +352,16 @@ this.getCourseMongo=function(){
 
 		}
 
+		var promise=ReviewFactory.getCoursesMongo();
+	promise.then(function(data){
+		console.log(data);
+		vm.courses=data;	
+	}, function(reason){
+		console.log(reason)
+	}, function(update){
+		console.log("got notification" + update);
+	});
+
 	};
 
 	this.getUserLogs=function(){
@@ -366,6 +384,28 @@ this.getCourseMongo=function(){
 			this.showLogDetails=true;
 			this.showUserLogs=false;
 		
+	};
+
+			this.deleteReview=function(type,id){
+			if(type==1 && id==0 && this.courseID!='')
+			{
+				this.displayReviews();
+			}
+		else if(type==2)
+		{
+			
+	// 		var promise=ReviewFactory.deleteReviewsMongo(id);
+	// promise.then(function(data){
+	// 	console.log(data);
+	// 	vm.courses=data;	
+	// }, function(reason){
+	// 	console.log(reason)
+	// }, function(update){
+	// 	console.log("got notification" + update);
+	// });
+
+	this.displayReviews();
+		}
 	};
 
 

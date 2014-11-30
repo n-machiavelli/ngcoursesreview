@@ -112,11 +112,42 @@ angular.module('ngReviewApp')
 		}		
 
 
+
+    this.deleteReviewsMongo=function deleteReviewsMongo(courseID){
+      var deferred=$q.defer();
+      var request = $http({
+                method: 'POST',
+                url: apiUrl + "reviews/delete",
+                data: {
+                  courseID: courseID,
+                  apiKey: apiKey
+                }
+                ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            /* Check whether the HTTP Request is Successfull or not. */
+            request.success(function (data) {
+              message='Course Deleted Successfully';
+               console.log("Course Deleted successfully");
+               console.log(data);
+               deferred.resolve(data);
+               // $scope.message = "From PHP file : "+data;
+            })
+              .error(function(error){
+                console.log(error);
+                deferred.reject(error);
+              });
+      //vm.reviews=ReviewFactory.getReviews(courseID);
+      //console.log("Review has been added");
+      return deferred.promise;      
+    }   
+
+
+
     this.getLogs=function getLogs(apiKey){
       var deferred=$q.defer();
       var request = $http({
                 method: 'POST',
-                url: "api/v1/logs/list",
+                url: apiUrl+"logs/list",
                 data: {
                   apiKey: apiKey
                 }
