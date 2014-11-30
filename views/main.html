@@ -2,7 +2,7 @@
 
 <form method="post" autocomplete="off" ng-submit="vm.logout()" >
 
-<input style="float:right;background:red"class="btn btn-lg btn-danger" type="submit" value="Logout" ng-click="logout()" />
+<input  id="logoutButton" style="float:right;background:red"class="btn btn-lg btn-danger" type="submit" value="Logout" ng-click="logout()" />
 </form><br/>
 <div><h2>Welcome <br/>{{vm.email}}</h2></div>
 
@@ -30,20 +30,20 @@
                         <img src="images/ou.jpg"/>
                         
                         <p>Add your reviews for the course</p><br/>
-                        <input class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;Add Reviews&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.formControl(1)" />
+                        <input id="addReviewButton" class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;Add Reviews&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.formControl(1)" />
                     </div>
 
                                      <div class="img-circle-div">
                         <img src="images/milner.jpg"/>
                         
                         <p>Books Recommended for the course by the department</p>
-                        <input class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;Books&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.displayBooks()" />
+                        <input id="booksButton" class="btn btn-lg btn-success" type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;Books&nbsp;&nbsp;&nbsp;&nbsp;" ng-click="vm.displayBooks()" />
                     </div>
 
                     <div class="img-circle-div">
                         <img src="images/reviews.jpg"/>
                         <p>View Reviews given by other students</p>
-                        <input class="btn btn-lg btn-success" type="submit" value="Display Reviews" ng-click="vm.displayReviews()"/>
+                        <input id="reviewsButton" class="btn btn-lg btn-success" type="submit" value="Display Reviews" ng-click="vm.displayReviews()"/>
                     </div>
                 </article>
             </div>

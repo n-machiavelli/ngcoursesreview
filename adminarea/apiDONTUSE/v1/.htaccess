@@ -1,0 +1,11 @@
+DirectoryIndex api.php
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^$ api.php [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ api.php?request=$1 [QSA,L]
+</IfModule>
+<IfModule mod_php5.c>
+    php_flag display_errors On
+</IfModule>
