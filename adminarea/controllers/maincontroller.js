@@ -42,6 +42,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 	this.newCourseName='';
 	this.newCourseBookTitle='';
 	this.newCourseBookAuthor='';
+	//this.deleteReviewID='';
 
 
 
@@ -386,25 +387,25 @@ this.getCourseMongo=function(){
 		
 	};
 
-			this.deleteReview=function(type,id){
-			if(type==1 && id==0 && this.courseID!='')
-			{
-				this.displayReviews();
-			}
+		this.deleteReview=function(type,id){
+		if(type==1 && id==0 && this.courseID!='')
+		{
+			this.displayReviews();
+		}
 		else if(type==2)
 		{
-			
-	// 		var promise=ReviewFactory.deleteReviewsMongo(id);
-	// promise.then(function(data){
-	// 	console.log(data);
-	// 	vm.courses=data;	
-	// }, function(reason){
-	// 	console.log(reason)
-	// }, function(update){
-	// 	console.log("got notification" + update);
-	// });
+			console.log(vm.reviews[id].IDD);
+			var promise=ReviewFactory.deleteReviewsMongo(vm.reviews[id].IDD);
+			promise.then(function(data){
+				console.log(data);
+				vm.courses=data;	
+			}, function(reason){
+				console.log(reason)
+			}, function(update){
+				console.log("got notification" + update);
+			});
 
-	this.displayReviews();
+			this.displayReviews();
 		}
 	};
 

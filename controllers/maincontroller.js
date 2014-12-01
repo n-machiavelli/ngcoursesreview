@@ -167,7 +167,7 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 
 	this.addReviews=function(){
 
-		var promise=ReviewFactory.addReview(this.auth.uid,this.courseID,this.reviewTitle,this.bookTitle,this.reviewBody);
+		var promise=ReviewFactory.addReview(this.auth.uid,this.courseID,this.reviewTitle,this.bookTitle,this.reviewBody,"Desktop Location", this.email);
 		promise.then(function(message){
 			console.log(message);
 			vm.message=message;

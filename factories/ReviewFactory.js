@@ -113,21 +113,21 @@ angular.module('ngReviewApp')
 
 
 
-    this.deleteReviewsMongo=function deleteReviewsMongo(courseID){
+    this.deleteReviewsMongo=function deleteReviewsMongo(reviewID){
       var deferred=$q.defer();
       var request = $http({
                 method: 'POST',
                 url: apiUrl + "reviews/delete",
                 data: {
-                  courseID: courseID,
+                  reviewID: reviewID,
                   apiKey: apiKey
                 }
                 ,headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
             /* Check whether the HTTP Request is Successfull or not. */
             request.success(function (data) {
-              message='Course Deleted Successfully';
-               console.log("Course Deleted successfully");
+              message='Review Deleted Successfully';
+               console.log("Review Deleted successfully");
                console.log(data);
                deferred.resolve(data);
                // $scope.message = "From PHP file : "+data;

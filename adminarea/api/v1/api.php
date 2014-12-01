@@ -195,6 +195,7 @@ class API
     //echo "Collection selected successfully<br/>";
     if ($this->verb=="list"){
         $arr=[];
+        $arr2=[];
         $coursetofind=json_decode($this->request);
         $coursetofind=$coursetofind->courseID;
         $cursor = $collection->find(array('courseID' => $coursetofind));
@@ -202,7 +203,17 @@ class API
         foreach ($cursor as $document) {
             $arr[]=$document;
         }
-        return $arr ; // json_encode($arr);
+
+        foreach ($arr as $review){
+          //print_r($review);
+          //echo "id is " .$review['_id']."::";
+          $review['IDD']=$review['_id'].'';
+          //$review[]=$review['_id'];
+          //echo $review["IDD"];
+          $arr2[]=$review;
+          //$review->ID=$review->_id->$id;
+        }        
+        return $arr2 ; // json_encode($arr);
     }
     if ($this->verb=="add"){
         $request = json_decode($this->request);
@@ -253,10 +264,11 @@ class API
             //echo "Database coursereview selected";
             $collection = $db->coursereviews;
             //echo "Collection selected succsessfully";
-            $cursor = $collection->remove(array('reviewID' => $reviewtodelete));
-            $this->log($apiKey,"Deleted",$reviewtodelete);
+            //$item = $collection->findOne(array('_id' => new MongoId('4e49fd8269fd873c0a000000')));            
+            $cursor = $collection->remove(array('_id' => new MongoId($reviewtodelete)));
+            $this->log($apiKey,"Deleted",$reviewtodelete,$m);
 
-            return "Deleted.";
+            return "Review Deleted.";
         }
        
 }
