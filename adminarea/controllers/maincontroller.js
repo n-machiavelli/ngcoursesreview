@@ -55,6 +55,10 @@ function MainController(ReviewFactory,AuthFactory,BookFactory,$location,$http){
 		console.log(authData.uid);
 		console.log(authData);
 		vm.email=authData.password.email;
+		if (authData.role != "isadmin"){
+			console.log("back to login. not admin");
+			$location.path("/login");					
+		}
 	},function(reason){
 		console.log("back to login. no authData");
 		$location.path("/login");		
